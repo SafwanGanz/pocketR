@@ -8,14 +8,31 @@ A user-friendly terminal tool for R programming in Termux. Create, edit, run, an
 2. Update Termux and install required packages:
    ```bash
    pkg update && pkg upgrade
-   pkg install R nano
+   pkg install root-repo
+   pkg install x11-repo
+   pkg install git
+   pkg install r-base
    ```
-3. Download or save `pocketR.sh` to your Termux home directory (`/data/data/com.termux/files/home`):
-   - Copy the script content from the source and save it as `pocketR.sh` using a text editor, or
-   - Use `wget` or `curl` if available (e.g., `wget <script-url> -O pocketR.sh`).
-4. Make the script executable:
+
+   test
+   ```bash
+   R --version
+   ```
+4. Clone pocketR Repo
+   ```bash
+   git clone https://github.com/SafwanGanz/pocketR
+   ```
+5. Open Cloned Repo
+   ```bash
+   cd pocketR
+   ```
+6. Make the script executable:
    ```bash
    chmod +x pocketR.sh
+   ```
+7. Run pocketR
+   ```bash
+   ./pocketR
    ```
 
 ## Running the Tool
