@@ -13,7 +13,7 @@ if ! command -v pkg &> /dev/null; then
 fi
 
 if ! command -v R &> /dev/null; then
-    echo -e "${YELLOW}Installing R...${NC}"
+    echo -e "${YELLOW}Installing R for API...${NC}"
     pkg install science-repo -y
     pkg update
     pkg install r-base -y
@@ -32,6 +32,11 @@ fi
 if ! command -v nano &> /dev/null; then
     echo -e "${YELLOW}Installing nano...${NC}"
     pkg install nano -y
+fi
+
+if ! command -v netstat &> /dev/null; then
+    echo -e "${YELLOW}Installing net-tools...${NC}"
+    pkg install net-tools -y
 fi
 
 if [ ! -d "node_modules" ]; then
