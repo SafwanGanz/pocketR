@@ -30,7 +30,7 @@ A user-friendly terminal tool for R programming in Termux. Create, edit, run, an
    ```
 3. The menu will appear:
    ```
-   ======= Pocket R ======= (in cyan)
+   ======= Pocket R =======
          Powered by SyntaxTrail
    1. New R Script        
    2. Edit R Script       
