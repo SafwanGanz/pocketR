@@ -19,6 +19,7 @@ fi
 show_menu() {
     clear
     echo -e "${CYAN}======= Pocket R =======${NC}"
+    echo -e "${CYAN} Powered by SyntaxTrail ${NC}"
     echo -e "${YELLOW}1. New R Script${NC}"
     echo -e "${YELLOW}2. Edit R Script${NC}"
     echo -e "${YELLOW}3. Run R Script${NC}"
@@ -68,6 +69,7 @@ edit_script() {
     fi
     $EDITOR "$filename"
     echo -e "${GREEN}Finished editing: $filename${NC}"
+    suppose
     read -p "Press Enter to continue..."
 }
 
@@ -118,39 +120,3 @@ while true; do
         *) echo -e "${RED}Invalid option. Choose 1-6.${NC}"; read -p "Press Enter to continue..." ;;
     esac
 done
-```
-
-### How to Use in Termux
-1. Save the script as `pocketR.sh` in Termux (e.g., in `/data/data/com.termux/files/home`).
-2. Make it executable: `chmod +x pocketR.sh`.
-3. Run it: `./pocketR.sh`.
-4. Ensure R is installed in Termux:
-   - Run `pkg install R` to install R.
-   - Ensure `nano` is installed (`pkg install nano`) or set `EDITOR=vi` if preferred.
-5. The colorful menu will display:
-   ```
-   ======= Pocket R ======= (in cyan)
-   1. New R Script        (in yellow)
-   2. Edit R Script       (in yellow)
-   3. Run R Script        (in yellow)
-   4. Debug R Script      (in yellow)
-   5. Start R REPL        (in yellow)
-   6. Exit                (in yellow)
-   ======================= (in cyan)
-   Choose an option [1-6]: (in blue)
-   ```
-6. Colors used:
-   - **Cyan**: Header and footer
-   - **Yellow**: Menu options and action messages
-   - **Blue**: Input prompts
-   - **Green**: Success messages
-   - **Red**: Error messages
-7. Select options by entering 1-6. The tool prompts for filenames with colored text and pauses after each action.
-
-### Termux-Specific Notes
-- The shebang in new R scripts uses `/data/data/com.termux/files/usr/bin/Rscript`, matching Termux's R installation path.
-- The script checks for R and provides a Termux-specific installation command (`pkg install R`) in the error message.
-- `nano` is set as the default editor, as it’s user-friendly for Termux users, but you can change it to `vi` or another editor by setting the `EDITOR` environment variable.
-- Debugging uses R’s `browser()` function, temporarily added to scripts, as Termux supports R’s interactive debugging.
-
-This script is optimized for Termux, providing a colorful, interactive R development environment on Android.
