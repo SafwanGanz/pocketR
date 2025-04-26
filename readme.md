@@ -32,7 +32,7 @@ A user-friendly terminal tool for R programming in Termux. Create, edit, run, an
    ```
 7. Run pocketR
    ```bash
-   ./pocketR
+   ./pocketR.sh
    ```
 
 ## Running the Tool
