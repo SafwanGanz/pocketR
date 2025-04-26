@@ -1,8 +1,7 @@
 #!/bin/bash
 
 EDITOR=${EDITOR:-nano}
-R_BIN=$(which R)
-RSCRIPT_BIN=$(which Rscript)
+CURL_BIN=$(which curl)
 
 RED='\033[1;31m'
 GREEN='\033[1;32m'
@@ -11,8 +10,8 @@ BLUE='\033[1;34m'
 CYAN='\033[1;36m'
 NC='\033[0m'
 
-if [ -z "$R_BIN" ] || [ -z "$RSCRIPT_BIN" ]; then
-    echo -e "${RED}Error: R is not installed. Install R with 'pkg install R'.${NC}"
+if [ -z "$CURL_BIN" ]; then
+    echo -e "${RED}Error: curl is not installed. Run ./run.sh to install dependencies.${NC}"
     exit 1
 fi
 
@@ -25,9 +24,10 @@ show_menu() {
     echo -e "${YELLOW}3. Run R Script${NC}"
     echo -e "${YELLOW}4. Debug R Script${NC}"
     echo -e "${YELLOW}5. Start R REPL${NC}"
-    echo -e "${YELLOW}6. Exit${NC}"
+    echo -e "${YELLOW}6. Run API Command${NC}"
+    echo -e "${YELLOW}7. Exit${NC}"
     echo -e "${CYAN}=======================${NC}"
-    echo -e -n "${BLUE}Choose an option [1-6]: ${NC}"
+    echo -e -n "${BLUE}Choose an option [1-7]: ${NC}"
 }
 
 new_script() {
@@ -39,19 +39,10 @@ new_script() {
         return
     fi
     cat << EOF > "$filename"
-#!/data/data/com.termux/files/usr/bin/Rscript
 main <- function() {
     cat("Hello from Pocket R!\n")
 }
-if (!interactive()) {
-    tryCatch({
-        main()
-    }, error = function(e) {
-        cat("Error:", conditionMessage(e), "\n")
-        traceback()
-        quit(status=1)
-    })
-}
+main()
 EOF
     chmod +x "$filename"
     echo -e "${GREEN}Created: $filename${NC}"
@@ -69,7 +60,6 @@ edit_script() {
     fi
     $EDITOR "$filename"
     echo -e "${GREEN}Finished editing: $filename${NC}"
-    suppose
     read -p "Press Enter to continue..."
 }
 
@@ -81,8 +71,9 @@ run_script() {
         read -p "Press Enter to continue..."
         return
     fi
-    echo -e "${YELLOW}Running $filename...${NC}"
-    $RSCRIPT_BIN "$filename"
+    echo -e "${YELLOW}Running $filename via API...${NC}"
+    response=$($CURL_BIN -s -X POST -H "Content-Type: application/json" -d "{\"scriptPath\":\"$filename\"}" http://localhost:3000/run-script)
+    echo -e "${GREEN}Result: $response${NC}"
     read -p "Press Enter to continue..."
 }
 
@@ -95,15 +86,42 @@ debug_script() {
         return
     fi
     echo "browser()" >> "$filename"
-    echo -e "${YELLOW}Debugging $filename...${NC}"
-    $RSCRIPT_BIN -e "source('$filename')"
+    echo -e "${YELLOW}Debugging $filename via API...${NC}"
+    response=$($CURL_BIN -s -X POST -H "Content-Type: application/json" -d "{\"scriptPath\":\"$filename\"}" http://localhost:3000/run-script)
     sed -i '$ d' "$filename"
+    echo -e "${GREEN}Result: $response${NC}"
     read -p "Press Enter to continue..."
 }
 
 repl() {
-    echo -e "${YELLOW}Starting R REPL...${NC}"
-    $R_BIN
+    echo -e "${YELLOW}Starting R REPL via API...${NC}"
+    while true; do
+        echo -e -n "${BLUE}Enter R command (or 'quit' to exit): ${NC}"
+        read command
+        if [ "$command" = "quit" ]; then
+            break
+        fi
+        if [ -z "$command" ]; then
+            echo -e "${RED}Error: Command cannot be empty.${NC}"
+            continue
+        fi
+        response=$($CURL_BIN -s -X POST -H "Content-Type: application/json" -d "{\"command\":\"$command\"}" http://localhost:3000/run-command)
+        echo -e "${GREEN}Result: $response${NC}"
+    done
+    read -p "Press Enter to continue..."
+}
+
+run_api_command() {
+    echo -e -n "${BLUE}Enter R command (e.g., max(1,2,3)): ${NC}"
+    read command
+    if [ -z "$command" ]; then
+        echo -e "${RED}Error: Command cannot be empty.${NC}"
+        read -p "Press Enter to continue..."
+        return
+    fi
+    echo -e "${YELLOW}Sending command to API...${NC}"
+    response=$($CURL_BIN -s -X POST -H "Content-Type: application/json" -d "{\"command\":\"$command\"}" http://localhost:3000/run-command)
+    echo -e "${GREEN}Result: $response${NC}"
     read -p "Press Enter to continue..."
 }
 
@@ -116,7 +134,8 @@ while true; do
         3) run_script ;;
         4) debug_script ;;
         5) repl ;;
-        6) echo -e "${CYAN}Exiting Pocket R...${NC}"; exit 0 ;;
-        *) echo -e "${RED}Invalid option. Choose 1-6.${NC}"; read -p "Press Enter to continue..." ;;
+        6) run_api_command ;;
+        7) echo -e "${CYAN}Exiting Pocket R...${NC}"; exit 0 ;;
+        *) echo -e "${RED}Invalid option. Choose 1-7.${NC}"; read -p "Press Enter to continue..." ;;
     esac
 done
