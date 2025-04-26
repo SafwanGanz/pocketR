@@ -13,7 +13,12 @@ A user-friendly terminal tool for R programming in Termux. Create, edit, run, an
    pkg install git
    pkg install r-base
    ```
-
+   If Showing error when you try to install r-base
+   ```bash
+   echo "deb https://packages.termux.dev/apt/termux-science science stable" > $PREFIX/etc/apt/sources.list.d/science.list
+   pkg update
+   pkg install r-base
+   ```
    test
    ```bash
    R --version
