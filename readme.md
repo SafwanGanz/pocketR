@@ -32,14 +32,14 @@ A user-friendly terminal tool for R programming in Termux. Create, edit, run, an
    ```
    ======= Pocket R ======= (in cyan)
          Powered by SyntaxTrail
-   1. New R Script        (in yellow)
-   2. Edit R Script       (in yellow)
-   3. Run R Script        (in yellow)
-   4. Debug R Script      (in yellow)
-   5. Start R REPL        (in yellow)
-   6. Exit                (in yellow)
-   ======================= (in cyan)
-   Choose an option [1-6]: (in blue)
+   1. New R Script        
+   2. Edit R Script       
+   3. Run R Script        
+   4. Debug R Script      
+   5. Start R REPL        
+   6. Exit                
+   ======================= 
+   Choose an option [1-6]: 
    ```
 4. Select an option by entering a number (1-6):
    - **1. New R Script**: Create a new R script with a template.
