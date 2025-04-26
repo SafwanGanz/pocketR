@@ -12,10 +12,6 @@ A colorful, user-friendly terminal tool for R programming in Termux, powered by 
    pkg install x11-repo
    pkg install git nodejs curl nano net-tools
    ```
-   Verify R installation (should be installed via `run.sh` if not present):
-   ```bash
-   R --version
-   ```
 3. Clone the Pocket R repository:
    ```bash
    git clone https://github.com/SafwanGanz/pocketR
