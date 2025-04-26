@@ -27,11 +27,6 @@ if ! command -v nano &> /dev/null; then
     pkg install nano -y
 fi
 
-if ! command -v netstat &> /dev/null; then
-    echo -e "${YELLOW}Installing net-tools...${NC}"
-    pkg install net-tools -y
-fi
-
 if [ ! -d "node_modules" ]; then
     echo -e "${YELLOW}Installing npm packages...${NC}"
     npm install express r-integration
@@ -58,8 +53,8 @@ node server.js &
 
 sleep 2
 
-if ! netstat -tuln | grep ":3000" > /dev/null; then
-    echo -e "${RED}Error: API failed to start on port 3000. Check for port conflicts or errors.${NC}"
+if ! curl -s --head http://localhost:3000 > /dev/null; then
+    echo -e "${RED}Error: API failed to start on port 3000. Check for port conflicts or missing R installation.${NC}"
     exit 1
 fi
 
