@@ -12,13 +12,6 @@ if ! command -v pkg &> /dev/null; then
     exit 1
 fi
 
-if ! command -v R &> /dev/null; then
-    echo -e "${YELLOW}Installing R for API...${NC}"
-    pkg install science-repo -y
-    pkg update
-    pkg install r-base -y
-fi
-
 if ! command -v node &> /dev/null; then
     echo -e "${YELLOW}Installing Node.js and npm...${NC}"
     pkg install nodejs -y
